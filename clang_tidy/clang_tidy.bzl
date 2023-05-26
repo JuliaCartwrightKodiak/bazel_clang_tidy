@@ -80,7 +80,7 @@ def _rule_sources(ctx):
     srcs = []
     if hasattr(ctx.rule.attr, "srcs"):
         for src in ctx.rule.attr.srcs:
-            srcs += [src for src in src.files.to_list() if src.is_source]
+            srcs += [src for src in src.files.to_list() if src.is_source and src.extension != "h"]
     return srcs
 
 def _toolchain_flags(ctx):
@@ -108,6 +108,7 @@ def _safe_flags(flags):
     unsupported_flags = [
         "-fno-canonical-system-headers",
         "-fstack-usage",
+        "-march=armv7e-m+fpv5",
     ]
 
     return [flag for flag in flags if flag not in unsupported_flags and not flag.startswith("--sysroot")]
